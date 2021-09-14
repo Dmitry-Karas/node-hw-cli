@@ -1,5 +1,5 @@
 import { Command } from "commander";
-import contacts from "./contacts.mjs";
+import contactsOperations from "./contacts/index.js";
 
 const program = new Command();
 program
@@ -13,27 +13,27 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-function invokeAction({ action, id, name, email, phone }) {
+const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case "list":
-      contacts.listContacts();
-      break;
+      await contactsOperations.listContacts();
+      return;
 
     case "get":
-      contacts.getContactById(id);
-      break;
+      await contactsOperations.getContactById(id);
+      return;
 
     case "add":
-      contacts.addContact(name, email, phone);
-      break;
+      contactsOperations.addContact(name, email, phone);
+      return;
 
     case "remove":
-      contacts.removeContact(id);
-      break;
+      contactsOperations.removeContact(id);
+      return;
 
     default:
       console.warn("\x1B[31m Unknown action type!");
   }
-}
+};
 
 invokeAction(argv);
